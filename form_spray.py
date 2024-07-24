@@ -23,7 +23,12 @@ st.header("Enter your data:")
 date = st.date_input("Tanggal Pelaksanaan")
 dropdown_selection = st.selectbox("Lokasi", blok_katalog_options)
 tangki = st.number_input("Jumlah Tangki", min_value=0, max_value=120, step=1)
-data_editor = st.data_editor(spray_katalog)
+
+# Remove the index for display
+spray_katalog_reset = spray_katalog.reset_index(drop=True)
+
+# Use data_editor to edit data without showing index
+data_editor = st.data_editor(spray_katalog_reset)
 
 # Create new_data DataFrame with the same columns as spray_data
 new_data = pd.DataFrame(columns=spray_data.columns)
@@ -47,9 +52,9 @@ for index, row in data_editor.iterrows():
 # Drop rows with zero takaran
 new_data = new_data[new_data['takaran'] != 0]
 
-# Show the new_data DataFrame
-st.write("New Data to be Saved:")
-st.dataframe(new_data)
+# # Show the new_data DataFrame
+# st.write("New Data to be Saved:")
+# st.dataframe(new_data)
 
 # Save the new data to CSV (append mode)
 if st.button('Save'):
