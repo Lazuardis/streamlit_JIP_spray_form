@@ -2,12 +2,19 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import datetime
+from streamlit_gsheets import GSheetsConnection
 
 # Streamlit app title
 st.title("Form Penyemprotan (Spray)")
 
+conn = st.connection('gsheets', type=GSheetsConnection)
+
+existing_data = conn.read(worksheet='spray', usecols=list(range(7)), ttl=5)
+
+# st.dataframe(existing_data)
+
 # Load data
-spray_data = pd.read_csv('form_spray.csv')
+
 blok_katalog = pd.read_csv('lokasi_katalog.csv', header=None)
 blok_katalog_options = blok_katalog.values.flatten().tolist()
 
@@ -20,8 +27,8 @@ spray_katalog = spray_katalog[['Material', 'Takaran', 'Unit']]
 
 # User input fields
 st.header("Enter your data:")
-date = st.date_input("Tanggal Pelaksanaan")
-dropdown_selection = st.selectbox("Lokasi", blok_katalog_options)
+date = st.date_input(label="Tanggal Pelaksanaan")
+dropdown_selection = st.selectbox("Lokasi", options=blok_katalog_options, index=None)
 tangki = st.number_input("Jumlah Tangki", min_value=0, max_value=120, step=1)
 
 # Remove the index for display
@@ -31,7 +38,7 @@ spray_katalog_reset = spray_katalog.reset_index(drop=True)
 data_editor = st.data_editor(spray_katalog_reset)
 
 # Create new_data DataFrame with the same columns as spray_data
-new_data = pd.DataFrame(columns=spray_data.columns)
+new_data = pd.DataFrame(columns=existing_data.columns)
 
 # Populate new_data with the values from data_editor and the input fields
 for index, row in data_editor.iterrows():
@@ -57,10 +64,21 @@ new_data = new_data[new_data['takaran'] != 0]
 # st.dataframe(new_data)
 
 # Save the new data to CSV (append mode)
-if st.button('Save'):
-    spray_data = pd.concat([spray_data, new_data], ignore_index=True)
-    spray_data.to_csv('form_spray.csv', index=False)
-    st.success("Data Sukses Tersimpan!")
+save_button = st.button('Save')
+
+if save_button:
+    if not date or not dropdown_selection:
+        st.warning("Pengisian data belum lengkap!")
+        st.stop()
+    elif tangki == 0:
+        st.warning("Jumlah tangki tidak boleh nol!")
+        st.stop()
+    else:
+        updated_data = pd.concat([existing_data, new_data], ignore_index=True)
+        
+        conn.update(worksheet='spray', data = updated_data)
+
+        st.success("Data berhasil disimpan!")
 
 st.markdown('''
 ---

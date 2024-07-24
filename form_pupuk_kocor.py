@@ -2,12 +2,17 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import datetime
+from streamlit_gsheets import GSheetsConnection
 
 # Streamlit app title
 st.title("Form Pemupukan Kocor")
 
+conn = st.connection('gsheets', type=GSheetsConnection)
+
+existing_data = conn.read(worksheet='pupuk_kocor', usecols=list(range(7)), ttl=5)
+
 # Load data
-kocor_data = pd.read_csv('form_pupuk_kocor.csv')
+
 blok_katalog = pd.read_csv('lokasi_katalog.csv', header=None)
 blok_katalog_options = blok_katalog.values.flatten().tolist()
 
@@ -31,7 +36,7 @@ pupuk_katalog_reset = pupuk_katalog.reset_index(drop=True)
 data_editor = st.data_editor(pupuk_katalog_reset)
 
 # Create new_data DataFrame with the same columns as spray_data
-new_data = pd.DataFrame(columns=kocor_data.columns)
+new_data = pd.DataFrame(columns=existing_data.columns)
 
 # Populate new_data with the values from data_editor and the input fields
 for index, row in data_editor.iterrows():
@@ -56,12 +61,22 @@ new_data = new_data[new_data['takaran'] != 0]
 # st.write("New Data to be Saved:")
 # st.dataframe(new_data)
 
-# Save the new data to CSV (append mode)
-if st.button('Save'):
-    kocor_data = pd.concat([kocor_data, new_data], ignore_index=True)
-    kocor_data.to_csv('form_pupuk_kocor.csv', index=False)
-    st.success("Data Sukses Tersimpan!")
 
+save_button = st.button('Save')
+
+if save_button:
+    if not date or not dropdown_selection:
+        st.warning("Pengisian data belum lengkap!")
+        st.stop()
+    elif tangki == 0:
+        st.warning("Jumlah tangki tidak boleh nol!")
+        st.stop()
+    else:
+        updated_data = pd.concat([existing_data, new_data], ignore_index=True)
+        
+        conn.update(worksheet='pupuk_kocor', data = updated_data)
+
+        st.success("Data berhasil disimpan!")
 st.markdown('''
 ---
 Created by [Java in Paradise](https://github.com/your-github)
