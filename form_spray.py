@@ -4,7 +4,7 @@ import numpy as np
 import datetime
 
 # Streamlit app title
-st.title("Data Entry Dashboard")
+st.title("Form Penyemprotan (Spray)")
 
 # Load data
 spray_data = pd.read_csv('form_spray.csv')
@@ -64,5 +64,5 @@ if st.button('Save'):
 
 st.markdown('''
 ---
-Created by [Your Name](https://github.com/your-github)
+Created by [Java in Paradise](https://github.com/your-github)
 ''')
