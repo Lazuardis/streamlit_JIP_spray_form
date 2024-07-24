@@ -3,8 +3,6 @@ import pandas as pd
 import numpy as np
 import datetime
 
-
-
 # Streamlit app title
 st.title("Data Entry Dashboard")
 
@@ -17,9 +15,8 @@ spray_katalog = pd.read_csv('spray_katalog.csv', header=None)
 spray_katalog.columns = ['Material', 'Unit']
 spray_katalog['Takaran'] = 0
 
-# reorder columns name of spray_katalog into material, takaran, unit 
+# Reorder columns name of spray_katalog into Material, Takaran, Unit 
 spray_katalog = spray_katalog[['Material', 'Takaran', 'Unit']]
-
 
 # User input fields
 st.header("Enter your data:")
@@ -45,18 +42,18 @@ for index, row in data_editor.iterrows():
         'takaran': takaran,
         'unit': unit
     }
-    new_data = new_data.append(new_row, ignore_index=True)
+    new_data = pd.concat([new_data, pd.DataFrame([new_row])], ignore_index=True)
 
-# drop rows with zero takaran
+# Drop rows with zero takaran
 new_data = new_data[new_data['takaran'] != 0]
 
 # Show the new_data DataFrame
-# st.write("New Data to be Saved:")
-# st.dataframe(new_data)
+st.write("New Data to be Saved:")
+st.dataframe(new_data)
 
 # Save the new data to CSV (append mode)
 if st.button('Save'):
-    spray_data = spray_data.append(new_data, ignore_index=True)
+    spray_data = pd.concat([spray_data, new_data], ignore_index=True)
     spray_data.to_csv('form_spray.csv', index=False)
     st.success("Data Sukses Tersimpan!")
 
