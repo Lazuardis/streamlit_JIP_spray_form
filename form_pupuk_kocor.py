@@ -26,7 +26,7 @@ pupuk_katalog = pupuk_katalog[['Material', 'Takaran', 'Unit']]
 # User input fields
 st.header("Enter your data:")
 date = st.date_input("Tanggal Pelaksanaan")
-dropdown_selection = st.selectbox("Lokasi", blok_katalog_options)
+dropdown_selection = st.selectbox("Lokasi", options=blok_katalog_options, index=None)
 tangki = st.number_input("Jumlah Tangki", min_value=0, max_value=120, step=1)
 
 # Remove the index for display
