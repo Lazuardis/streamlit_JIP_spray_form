@@ -11,8 +11,6 @@ conn = st.connection('gsheets', type=GSheetsConnection)
 
 existing_data = conn.read(worksheet='spray', usecols=list(range(7)), ttl=5)
 
-# st.dataframe(existing_data)
-
 # Load data
 
 blok_katalog = pd.read_csv('lokasi_katalog.csv', header=None)
@@ -63,7 +61,7 @@ new_data = new_data[new_data['takaran'] != 0]
 # st.write("New Data to be Saved:")
 # st.dataframe(new_data)
 
-# Save the new data to CSV (append mode)
+
 save_button = st.button('Save')
 
 if save_button:
@@ -79,7 +77,6 @@ if save_button:
         conn.update(worksheet='spray', data = updated_data)
 
         st.success("Data berhasil disimpan!")
-
 st.markdown('''
 ---
 Created by [Java in Paradise](https://github.com/your-github)
