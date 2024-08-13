@@ -7,8 +7,6 @@ from streamlit_gsheets import GSheetsConnection
 # Streamlit app title
 st.title("Form Pekerjaan")
 
-conn = st.connection('gsheets', type=GSheetsConnection)
-
 # Select box for choosing the type of work
 job_type = st.selectbox("Jenis Pekerjaan",
                         options=["", "Kocor Pupuk", "Spray"])
@@ -16,7 +14,7 @@ job_type = st.selectbox("Jenis Pekerjaan",
 if job_type == "Kocor Pupuk":
     st.header("Form Pemupukan Kocor")
 
-    # conn = st.connection('gsheets', type=GSheetsConnection)
+    conn = st.connection('gsheets', type=GSheetsConnection)
     existing_data = conn.read(worksheet='pupuk_kocor',
                               usecols=list(range(7)),
                               ttl=5)
@@ -84,7 +82,7 @@ if job_type == "Kocor Pupuk":
 elif job_type == "Spray":
     st.header("Form Penyemprotan (Spray)")
 
-    # conn = st.connection('gsheets', type=GSheetsConnection)
+    conn = st.connection('gsheets', type=GSheetsConnection)
     existing_data = conn.read(worksheet='spray', usecols=list(range(7)), ttl=5)
 
     # Load data
