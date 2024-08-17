@@ -16,9 +16,7 @@ if job_type == "Kocor Pupuk":
     st.header("Form Pemupukan Kocor")
 
     conn = st.connection('gsheets', type=GSheetsConnection)
-    existing_data = conn.read(worksheet='pupuk_kocor',
-                              usecols=list(range(7)),
-                              ttl=5)
+    existing_data = conn.read(worksheet='pupuk_kocor', usecols=list(range(7)), ttl=5)
 
     # Load data
     blok_katalog = pd.read_csv('lokasi_katalog.csv', header=None)
