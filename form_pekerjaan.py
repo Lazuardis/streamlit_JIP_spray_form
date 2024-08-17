@@ -12,13 +12,13 @@ st.title("Form Pekerjaan")
 job_type = st.selectbox("Jenis Pekerjaan",
                         options=["", "Kocor Pupuk", "Spray"])
 
-url = "https://docs.google.com/spreadsheets/d/1xoFAFQjNUDNohoAhWzkwEyOoQ4d7_gHTtYAEXvNBq-c"
+url = "https://docs.google.com/spreadsheets/d/1xoFAFQjNUDNohoAhWzkwEyOoQ4d7_gHTtYAEXvNBq-c/edit?gid=0#gid=0"
 
 if job_type == "Kocor Pupuk":
     st.header("Form Pemupukan Kocor")
 
     conn = st.connection('gsheets', type=GSheetsConnection)
-    # st.write(conn)
+    st.write(conn)
     existing_data = conn.read(spreadsheet=url,worksheet='pupuk_kocor', usecols=list(range(7)), ttl=5)
 
     # Load data
