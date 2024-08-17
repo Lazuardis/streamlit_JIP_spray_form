@@ -205,7 +205,7 @@ if job_type == "Jojoh Pupuk":
         if not date or not dropdown_selection:
             st.warning("Pengisian data belum lengkap!")
             st.stop()
-        elif tangki == 0:
+        elif pohon == 0:
             st.warning("Jumlah tangki tidak boleh nol!")
             st.stop()
         else:
