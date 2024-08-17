@@ -85,7 +85,7 @@ elif job_type == "Spray":
     st.header("Form Penyemprotan (Spray)")
 
     conn = st.connection('gsheets', type=GSheetsConnection)
-    existing_data = conn.read(spreadsheet="JIP_spray_pemupukan",worksheet='spray', usecols=list(range(7)), ttl=5)
+    existing_data = conn.read(spreadsheet=url,worksheet='spray', usecols=list(range(7)), ttl=5)
 
     # Load data
     blok_katalog = pd.read_csv('lokasi_katalog.csv', header=None)
