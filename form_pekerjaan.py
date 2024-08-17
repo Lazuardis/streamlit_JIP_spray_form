@@ -18,7 +18,7 @@ if job_type == "Kocor Pupuk":
     st.header("Form Pemupukan Kocor")
 
     conn = st.connection('gsheets', type=GSheetsConnection)
-    st.write(conn)
+    # st.write(conn)
     existing_data = conn.read(spreadsheet=url,worksheet='pupuk_kocor', usecols=list(range(7)), ttl=5)
 
     # Load data
