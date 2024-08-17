@@ -211,7 +211,7 @@ if job_type == "Jojoh Pupuk":
         else:
             updated_data = pd.concat([existing_data, new_data],
                                      ignore_index=True)
-            conn.update(worksheet='pupuk_kocor', data=updated_data)
+            conn.update(worksheet='pupuk_jojoh', data=updated_data)
             st.success("Data berhasil disimpan!")
 
 st.markdown('''
